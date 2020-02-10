@@ -5,7 +5,7 @@ var path = require("path");
 var request = require("request");
 var cheerio = require("cheerio");
 
-var Comment = require("../models/Comment.js");
+var Comment = require("../models/Note.js");
 var Article = require("../models/Article.js");
 
 router.get("/", function (req, res) {
@@ -13,11 +13,11 @@ router.get("/", function (req, res) {
 });
 
 router.get("/scrape", function (req, res) {
-    request("http://www.theverge.com", function (error, response, html) {
+    request("https://www.nytimes.com/", function (error, response, html) {
         var $ = cheerio.load(html);
         var titlesArray = [];
 
-        $(".c-entry-box--compact__title").each(function (i, element) {
+        $(".css-n2blzn esl82me0").each(function (i, element) {
             var result = {};
 
             result.title = $(this)
@@ -48,7 +48,7 @@ router.get("/scrape", function (req, res) {
                     console.log("Article already exists.");
                 }
             } else {
-                console.log("Not saved to DB, missing data");
+                console.log("Not saved to the database, missing data");
             }
         });
         res.redirect("/");
@@ -56,8 +56,7 @@ router.get("/scrape", function (req, res) {
 });
 router.get("/articles", function (req, res) {
     Article.find()
-        .sort({ _id: -1 })
-        .exec(function (err, doc) {
+        .sort({ _id: -1 }).exec(function (err, doc) {
             if (err) {
                 console.log(err);
             } else {
@@ -108,7 +107,7 @@ router.get("/readArticle/:id", function (req, res) {
 
                     $(".l-col__main").each(function (i, element) {
                         hbsObj.body = $(this)
-                            .children(".c-entry-content")
+                            .children("a")
                             .children("p")
                             .text();
 
