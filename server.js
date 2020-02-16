@@ -1,36 +1,52 @@
-// Start with dependencies
-var bodyParser = require("body-parser");
-var mongoose = require("mongoose");
-var logger = require("morgan");
+// Require dependencies
+var express = require('express');
+var mongoose = require('mongoose');
+var expressHandlebars = require('express-handlebars');
+var bodyParser = require('body-parser');
 
-// Initialize Express app
-var express = require("express");
+// Set up our port
+var PORT = process.env.PORT || 3000;
+
+// Instantiate our Express app
 var app = express();
 
-app.use(logger("dev"));
-app.use(bodyParser.urlencoded({ extended: false }));
+// Set up an Express router
+var router = express.Router();
 
-app.use(express.static(process.cwd() + "/public"));
+// Require our routes file pass our router object
+require("./config/routes")(router);
 
-// Require handlebars
-var exphbs = require("express-handlebars");
-app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+// Designate our public folder as a static directory
+app.use(express.static(__dirname + "/public"));
+
+// Connect Handlebars to our Express app
+app.engine("handlebars", expressHandlebars({
+    defaultLayout: "main"
+}));
 app.set("view engine", "handlebars");
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/newscrapper";
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
+// Use bodyParser in our app
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 
-var db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error:"));
-db.once("open", function () {
-    console.log("Connected to Mongoose!");
+// Have every request go through our router middleware
+app.use(router);
+
+// If deployed, use the deployed database, otherwise use the local mongoHeadlines database
+var db = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+
+// Connect mongoose to our database
+mongoose.connect(db, function (error) {
+    if (error) {
+        console.log(error);
+    }
+    else {
+        console.log("mongoose connection is successful")
+    }
 });
 
-var routes = require("./controller/controller.js");
-app.use("/", routes);
-
-// Set up our local host port
-var port = process.env.PORT || 3000;
-app.listen(port, function () {
-    console.log("Listening on PORT " + port);
+// Listen on the port
+app.listen(PORT, function () {
+    console.log("Listening on port: " + PORT)
 });

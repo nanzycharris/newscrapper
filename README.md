@@ -1,2 +1,2 @@
-# newscrapper
-Mongoose and Cheerio app
+# nytnewsscrapper
+Mongoose and Cheerio news scrapper app
