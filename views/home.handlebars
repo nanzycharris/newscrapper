@@ -1,5 +1,5 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <a class="navbar-brand" href="/">Mongo Scraper</a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary" id="topnav">
+    <a class="navbar-brand" href="/">Mongo News Scraper</a>
     <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01"
         aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -31,8 +31,8 @@
     <div class="background-image">
     </div>
     <div class="caption">
-        <h1>Mongo Scraper</h1>
-        <p>New York Times Edition</p>
+        <h1>Mongo News Scraper</h1>
+        <p>Headlines from the New York Times</p>
     </div>
 </div>
 <div class="container-fluid article-container">
@@ -49,7 +49,7 @@
     </div>
     {{/each}} {{#unless articles.length}}
     <div class='alert alert-warning text-center'>
-        <h4>Uh Oh. Looks like we don't have any new articles.</h4>
+        <h4>Uh oh, it looks like we don't have any new articles.</h4>
     </div>
     <div class="card">
         <div class="card-header text-center">
@@ -69,7 +69,7 @@
 
 <footer class="footer">
     <div class="container">
-        <p>New York Times Mongo Scraper</p>
+        <p>New York Times Mongo News Scraper</p>
     </div>
 </footer>
 
